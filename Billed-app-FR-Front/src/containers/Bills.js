@@ -39,14 +39,26 @@ export default class {
         .bills()
         .list()
         .then(snapshot => {
-          const bills = snapshot
+          let data = snapshot.filter(item => item.date !== null)
+          let mapped = data.map((e, i) => { return { index: i, value: e.date } })
+          mapped.sort((a, b) => {
+            if (a.value > b.value) {
+              return -1;
+            }
+            if (a.value < b.value) {
+              return 1;
+            }
+            return 0;
+          })
+
+          let result = mapped.map(e => { return data[e.index] })
+          const bills = result
 
             .map(doc => {
               try {
-
                 return {
                   ...doc,
-                  date: formatDate(doc.date),
+                  date: doc.date,
                   status: formatStatus(doc.status)
                 }
               } catch (e) {
@@ -56,7 +68,7 @@ export default class {
 
               }
             })
-          console.log('length', bills.length)
+          console.log('length', bills)
           return bills
         })
     }

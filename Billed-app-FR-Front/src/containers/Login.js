@@ -19,7 +19,7 @@ export default class Login {
   }
 
   handleSubmitEmployee = e => {
-    console.log(e)
+
     e.preventDefault()
     const user = {
       type: "Employee",
