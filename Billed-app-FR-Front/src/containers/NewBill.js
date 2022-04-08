@@ -22,20 +22,20 @@ export default class NewBill {
 
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length - 4]
+    const formData = new FormData()
+    const email = JSON.parse(localStorage.getItem("user")).email
+    formData.append('file', file)
+    formData.append('email', email)
     /***rajout de code, on verifie l'extension */
-    const fileIsOK = (jpg, jpeg, png) =>
-      file.name.split('.').pop() === jpg ||
-      file.name.split('.').pop() === jpeg ||
-      file.name.split('.').pop() === png
+
 
     /*** si l'extension est bonne alors les données sont enregistrés */
     /* sinon alert le fichier n'est pas bon*/
 
-    if (fileIsOK("jpg", "jpeg", "png")) {
-      const formData = new FormData()
-      const email = JSON.parse(localStorage.getItem("user")).email
-      formData.append('file', file)
-      formData.append('email', email)
+    if (e.target.value.includes("jpg") ||
+      e.target.value.includes("jpeg") ||
+      e.target.value.includes("png")) {
+
       this.store
         .bills()
         .create({
@@ -50,13 +50,12 @@ export default class NewBill {
           this.fileName = fileName
         }).catch(error => console.error(error))
 
-    } else { alert("le fichier n'est pas bon") }
+    } else { window.alert("Le fichier doit avoir une extension jpg/jpeg/png") }
 
 
   }
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -73,11 +72,11 @@ export default class NewBill {
     }
 
 
-    console.log(bill.name)
+
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
-
+  /* istanbul ignore next */
   // not need to cover this function by tests
   updateBill = (bill) => {
     if (this.store) {
