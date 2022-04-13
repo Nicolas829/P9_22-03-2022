@@ -155,7 +155,7 @@ export default class {
 
       this.counter++
     }
-
+    //meilleur flechage des tickets pour ne pas avoir de conflits dans le nombre de this.counter
     bills.forEach(bill => {
 
       $(`#status-bills-container${this.index} #open-bill${bill.id}`).click((e) => { this.handleEditTicket(e, bill, bills) })
